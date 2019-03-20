@@ -19,7 +19,7 @@ if(!dir.exists(path)) dir.create(path, recursive = T)
 # read sample summary list
 # read sample summary list
 args <- commandArgs(trailingOnly = TRUE)
-df_samples <- readxl::read_excel(paste0("doc/",args[1]))
+df_samples <- readxl::read_excel(args[1])
 print(df_samples)
 df_samples = as.data.frame(df_samples)
 colnames(df_samples) <- colnames(df_samples) %>% tolower
