@@ -81,7 +81,6 @@ sce_list <- lapply(sce_list, function(x) calculateQCMetrics(x,compact = FALSE,
 for(i in 1:length(sce_list)){
         logcounts(sce_list[[i]]) <- as(log1p(assay(sce_list[[i]], "counts")),"dgCMatrix")
 }
-save(sce_list, file = paste0("data/","sce_raw_",length(sample_n),"_",gsub("-","",Sys.Date()),".Rda"))
 
 ########################################################################
 

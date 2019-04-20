@@ -4,7 +4,7 @@
 # 
 # ######################################################################
 
-invisible(sapply(c("Seurat","magrittr","tidyr","dplyr","kableExtra","gplots"), function(x) {
+invisible(sapply(c("Seurat","magrittr","tidyr","dplyr","kableExtra","gplots","pheatmap"), function(x) {
         suppressPackageStartupMessages(library(x,character.only = T))
 }))
 source("../R/Seurat_functions.R")
@@ -21,58 +21,90 @@ if(!dir.exists("./data/")) dir.create("data")
 # 3.1.1 load data
 # Rename ident
 args <- commandArgs(trailingOnly = TRUE)
-#(load(file = "./data/MouseTumor_2_20190219.Rda"))
-args[1] = as.character(args[1])
+(load(file = "./data/MouseTumor_2_20190417.Rda"))
+#args[1] = as.character(args[1])
+#(load(file = args[1]))
 
-# Manually RenameIdent cell type markers ================
-object %<>% SetAllIdent(id = "res.0.6")
-new.ident <- c("Monocytes/Macrophages",
-               "Monocytes/Macrophages",
-               "Monocytes/Macrophages",
-               "Monocytes/Macrophages",
-               "Monocytes/Macrophages", 
-               "Monocytes/Macrophages",
-               "Monocytes/Macrophages",
-               "Monocytes/Macrophages",
-               "T/NK cells",
-               "T/NK cells",
-               "Fibroblasts",
-               "Monocytes/Macrophages",
-               "T/NK cells",
-               "Monocytes/Macrophages",
-               "B cells")
-for (i in 0:14) {
-        object <- RenameIdent(object = object, old.ident.name = i, 
-                              new.ident.name = new.ident[i + 1])
-}
+#head(gde.all,10) %>% kable %>% kable_styling
 
-p4 <- TSNEPlot.1(object = object, do.label = T, group.by = "ident",
-                 do.return = TRUE, no.legend = T,
-                 #colors.use = ExtractMetaColor(object),
-                 pt.size = 1,label.size = 4,force = 2)+
-        ggtitle("Major cell types")+
-        theme(text = element_text(size=10),							
-              plot.title = element_text(hjust = 0.5,size = 18, face = "bold")) 
-
-jpeg(paste0(path,"PlotTsne_manual.jpeg"), units="in", width=10, height=7,res=600)
-print(p4)
-dev.off()
-object %<>% StashIdent(save.name = "manual")
-
-# Identify cell type markers ================
-gde.all <- FindAllMarkers.UMI(object,logfc.threshold = 0.25, only.pos = F,return.thresh = 0.05, 
-                                 test.use = "MAST")
-write.csv(gde.all, paste0(path,"all_markers.csv"))
-head(gde.all,10) %>% kable %>% kable_styling
 # FindPairMarkers
 (ident <- unique(object@meta.data$manual) %>% sort)
 print(ident.1 <- paste0(ident, "_NAM"))
 print(ident.2 <- paste0(ident, "_Control"))
-object@meta.data$manual = paste0(object@meta.data$manual, "_", object@meta.data$orig.ident)
+object@meta.data$manual_orig.ident = paste0(object@meta.data$manual, "_", object@meta.data$orig.ident)
+object %<>% SetAllIdent(id = "manual_orig.ident")
+table(object@ident)
+subfolder <- paste0(path,"NAM_vs_Control/")
+gde.pair <- FindPairMarkers(object, ident.1 = ident.1, ident.2 = ident.2,
+                               logfc.threshold = 0.05, min.cells.group =2,
+                               return.thresh = 0.05, only.pos = FALSE, save.path = subfolder)
+write.csv(gde.pair, paste0(subfolder,"pairwise_comparision.csv"))
+head(gde.pair,10) %>% kable %>% kable_styling
+
+
+#  DoHeatmap ============
 object %<>% SetAllIdent(id = "manual")
 table(object@ident)
-gde.pair <- FindPairMarkers(object, ident.1 = dent.1, ident.2 = ident.2,
-                               logfc.threshold = 0.25, min.cells.group =3,
-                               return.thresh = 0.05, only.pos = FALSE)
-write.csv(gde.pair, paste0(path,"pairwise_comparision.csv"))
-head(gde.pair,10) %>% kable %>% kable_styling
+if(!dir.exists(paste0(subfolder,"DoHeatmap/"))) dir.create(paste0(subfolder,"DoHeatmap/"), recursive = T)
+for(id in ident){
+        id.pair <- read.csv(paste0(subfolder,id,"_NAM vs.",id,"_Control.csv"), header = 1, row.names = 1)
+        object_subset <- SubsetData(object,ident.use = id)
+        object_subset %<>% ScaleData() %>% 
+                SetAllIdent(id = "orig.ident")
+        g <- DoHeatmap.1(object_subset, id.pair, Top_n = 50,
+                         use.scaled = T, 
+                         #col.low = "#FFFF00",col.mid = "#FFA500", col.high = "#FF0000",
+                         ident.use = paste("Control vs. NAM in", id),
+                         group.label.rot = F,cex.row = 4,remove.key =F,title.size = 12)
+        jpeg(paste0(subfolder,"DoHeatmap/",id,"_NAM vs.",id,"_Control~.jpeg"), units="in", width=10, height=7,
+             res=600)
+        print(g)
+        dev.off()
+
+}
+
+#  heatmap.2 ============
+object %<>% SetAllIdent(id = "manual")
+table(object@ident)
+Top_n =50
+if(!dir.exists(paste0(subfolder,"heatmap2/"))) dir.create(paste0(subfolder,"heatmap2/"), recursive = T)
+for(id in ident){
+        id.pair <- read.csv(paste0(subfolder,id,"_NAM vs.",id,"_Control.csv"), header = 1, row.names = 1)
+        object_subset <- SubsetData(object,ident.use = id)
+        object_subset %<>% ScaleData()
+        colnames(id.pair)[8] = "cluster"
+        top <-  id.pair %>%  group_by(cluster) %>% top_n(Top_n, avg_logFC)
+        bottom <-  id.pair %>% group_by(cluster) %>% top_n(Top_n, -avg_logFC)
+        all <- c(as.character(top$gene), as.character(bottom$gene))
+        y = object_subset@scale.data[unique(all),]
+        hc <- hclust(as.dist(1-cor(as.matrix(y), method="spearman")), method="complete")
+        cc = gsub("_.*","",hc$labels)
+        cc = gsub("Control","#B3DE69",cc)
+        cc = gsub("NAM","#195016",cc)
+        
+        jpeg(paste0(subfolder,"heatmap2/",id,"_NAM vs.",id,"_Control.jpeg"), units="in", width=10, height=7,res=600)
+        heatmap.2(as.matrix(y),
+                  Colv = as.dendrogram(hc), Rowv= F,
+                  ColSideColors = cc, trace ="none",labCol = FALSE,dendrogram = "column",#scale="row",
+                  key.xlab = "scale log nUMI",
+                  cexRow = 0.5,
+                  margins = c(2,5),
+                  #scale = "row",
+                  breaks = seq(-3,3,length.out = 300),
+                  col = rev(heat.colors(299)),
+                  main = paste0(id,"_NAM vs.",id,"_Control"))
+        par(lend = 1)           # square line ends for the color legend
+        legend(0, 0.8,       # location of the legend on the heatmap plot
+               legend = c("Control", "NAM"), # category labels
+               col = c("#B3DE69", "#195016"),  # color key
+               lty= 1,             # line style
+               lwd = 10            # line width
+        )
+        dev.off()
+}
+        
+# Identify cell type markers ================
+object %<>% SetAllIdent(id="orig.ident")
+gde.all <- FindAllMarkers.UMI(object,logfc.threshold = 0.1, only.pos = F,return.thresh = 0.05, 
+                              test.use = "MAST")
+write.csv(gde.all, paste0(subfolder,"All_NAM vs. All_Control.csv"))

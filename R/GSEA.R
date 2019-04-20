@@ -15,34 +15,39 @@ path <- paste0("./output/",gsub("-","",Sys.Date()),"/")
 if(!dir.exists(path)) dir.create(path, recursive = T)
 
 # 5.1 load data ==============
-(load(file = "./data/MouseTumor_2_20190219.Rda"))
+(load(file = "./data/MouseTumor_2_20190417.Rda"))
+
 ##################################
-# select Monocytes only
+# All cell type
 ##################################
-object <- SetAllIdent(object, id="manual")
+object %<>% SetAllIdent(id="orig.ident")
+PrepareGSEA(object, k = 100)
+ReportGSEA(file = "ALL_cell.h.all.NAM_versus_Control.Gsea.1555732506514",pos=T)
+ReportGSEA(file = "ALL_cell.GO.NAM_versus_Control.Gsea.1555732996935",pos=F)
+
+
+object %<>% SetAllIdent(id="manual")
 table(object@ident)
-TSNEPlot.1(object,do.label = T)
-Monocytes <- SubsetData(object, ident.use = "Monocytes/Macrophages")
-table(Monocytes@meta.data$singler1main)
-TSNEPlot.1(Monocytes,do.label = T)
+Macrophages <- SubsetData(object, ident.use = c("Macrophages")) %>% 
+        SetAllIdent(id="orig.ident")
+PrepareGSEA(Macrophages, k = 100)
+ReportGSEA(file = "Macrophages.Hallmark.NAM_versus_Control.Gsea.1555733693440",pos=F)
+ReportGSEA(file = "Macrophages.GO.NAM_versus_Control.Gsea.1555733933549",pos=T)
 
-##############################
-# PrepareGSEA
-###############################
-Monocytes <- SetAllIdent(Monocytes, id="orig.ident")
+Monocytes <- SubsetData(object, ident.use = c("Monocytes")) %>% 
+        SetAllIdent(id="orig.ident")
 PrepareGSEA(Monocytes, k = 100)
+ReportGSEA(file = "Monocytes.Hallmark.NAM_versus_Control.Gsea.1555734171475",pos=F)
+ReportGSEA(file = "NK_cells.GO.NAM_versus_Control.Gsea.1555736648009",pos=F)
 
-##############################
-# Run GSEA and generate reports
-###############################
-GSEA <- readr::read_delim("output/20190220/gsea_report_for_Control_go.xls",
-                      "\t", escape_double = FALSE, trim_ws = TRUE)
-GSEA %>% head(40) %>% kable() %>% kable_styling()
-(gsea_path <- paste0("~/gsea_home/output/",tolower(format(Sys.Date(), "%b%d")), 
-                     "/c5.all.Control_versus_NAM.Gsea.1550700096840"))
-(c5.all.Control_versus_NAM <- sapply(GSEA$NAME[1:9], function(name) {
-        paste0("enplot_",name, "_([0-9]+)*\\.png$")}) %>%
-                sapply(function(x) list.files(path = gsea_path, pattern =x)) %>%
-                .[sapply(.,length)>0] %>% #Remove empty elements from list with character(0)
-                paste(gsea_path, ., sep = "/")) 
-CombPngs(c5.all.Control_versus_NAM, ncol = 3)
+NK_cells <- SubsetData(object, ident.use = c("NK cells")) %>% 
+        SetAllIdent(id="orig.ident")
+PrepareGSEA(NK_cells, k = 100)
+ReportGSEA(file = "NK_cells.Hallmark.NAM_versus_Control.Gsea.1555735480255",pos=F)
+ReportGSEA(file = "GO.Lymphoid.NAM_versus_Control.Gsea.1554222618473",pos=T)
+
+T_cells <- SubsetData(object, ident.use = c("T cells")) %>% 
+        SetAllIdent(id="orig.ident")
+PrepareGSEA(T_cells, k = 100)
+ReportGSEA(file = "T_cells.Hallmark.NAM_versus_Control.Gsea.1555736788973",pos=F)
+ReportGSEA(file = "T_cells.GO.NAM_versus_Control.Gsea.1555737179894",pos=T)

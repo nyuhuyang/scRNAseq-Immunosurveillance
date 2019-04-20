@@ -13,7 +13,7 @@ if(!dir.exists(path)) dir.create(path, recursive = T)
 #====== 2.1 identify phenotype for each cluster  ==========================================
 args <- commandArgs(trailingOnly = TRUE)
 args[1] = as.character(args[1])
-(load(file = paste0("data/",args[1])))
+(load(file = args[1]))
 df_markers <- readxl::read_excel("../seurat_resources/bio-rad-markers.xlsx")
 #df_markers <- readxl::read_excel("../seurat_resources/bio-rad-markers.xlsx",sheet = "Human.sub")
 colnames(df_markers) = gsub(" ","_",colnames(df_markers))

@@ -24,6 +24,8 @@ print(df_samples)
 df_samples = as.data.frame(df_samples)
 colnames(df_samples) <- colnames(df_samples) %>% tolower
 sample_n = which(df_samples$tests %in% c("control",paste0("test",1:10)))
+df_samples <- df_samples[sample_n,]
+attach(df_samples)
 #df_samples[sample_n,] %>% kable() %>% kable_styling()
 table(df_samples$tests);nrow(df_samples)
 list_samples <- lapply(colnames(df_samples), function(col) df_samples[,col])
@@ -75,7 +77,6 @@ for(i in 1:length(list_samples$sample)){
         Seurat_list[[i]]@meta.data$tissues <- list_samples$tissues[i]
 }
 remove(Seurat_raw);GC()
-
 
 #======1.1.2 QC before merge =========================
 # if args 2 is passed

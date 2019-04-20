@@ -1,24 +1,25 @@
 library(readxl)
 library(dplyr)
-path <- paste0("./output/",gsub("-","",Sys.Date()),"/")
+path <- paste0("output/",gsub("-","",Sys.Date()),"/")
 if(!dir.exists(path)) dir.create(path, recursive = T)
-df <- read_excel("output/Cell_numbers.xlsx") %>% as.data.frame
+
+df <- read.csv(paste0("output/20190402/","singler2sub.csv"),header = T, row.names = 1)
 rownames(df) = df[,1]
 df = df[,-1]
 
-fisher_p_value = c()
-chisq_p_value = c()
+p_value = c()
 ColSum <- colSums(df)
 
 for(i in 1:nrow(df)){
         conting <- rbind(df[i,],ColSum-df[i,])
         FISH <- fisher.test(conting,conf.int = T)
-        fisher_p_value[i] = FISH$p.value
-        
-        CHI = chisq.test(conting, correct = T)
-        chisq_p_value[i] = CHI$p.value             
+        p_value[i] = FISH$p.value
+        #CHI = chisq.test(conting, correct = T)
+        #chisq_p_value[i] = CHI$p.value             
 }
 
-df$fisher_p_value = fisher_p_value
-df$chisq_p_value = chisq_p_value
+df$p_value = p_value
+df$p_val_adj = p.adjust(p = df$p_value, method = "bonferroni", 
+                               n = nrow(df))
+df %>% kable %>% kable_styling()
 write.csv(df,paste0(path,"cell_numbers.csv"))
