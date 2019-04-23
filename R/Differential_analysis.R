@@ -36,10 +36,11 @@ object %<>% SetAllIdent(id = "manual_orig.ident")
 table(object@ident)
 subfolder <- paste0(path,"NAM_vs_Control/")
 gde.pair <- FindPairMarkers(object, ident.1 = ident.1, ident.2 = ident.2,
-                               logfc.threshold = 0.05, min.cells.group =2,
+                               logfc.threshold = 0.05, 
                                return.thresh = 0.05, only.pos = FALSE, save.path = subfolder)
 write.csv(gde.pair, paste0(subfolder,"pairwise_comparision.csv"))
-head(gde.pair,10) %>% kable %>% kable_styling
+head(gde.pair[gde.pair$cluster1.vs.cluster2 == "NK cells_NAM vs.NK cells_Control",],10) %>% 
+        kable %>% kable_styling
 
 
 #  DoHeatmap ============

@@ -10,6 +10,8 @@ library(tidyr)
 library(kableExtra)
 library(magrittr)
 library(gplots)
+library(tidyverse)
+library(readr)
 source("../R/Seurat_functions.R")
 path <- paste0("./output/",gsub("-","",Sys.Date()),"/")
 if(!dir.exists(path)) dir.create(path, recursive = T)
@@ -18,7 +20,7 @@ if(!dir.exists(path)) dir.create(path, recursive = T)
 (load(file = "./data/MouseTumor_2_20190417.Rda"))
 
 ##################################
-# All cell type
+# Generate report from GSEA
 ##################################
 object %<>% SetAllIdent(id="orig.ident")
 PrepareGSEA(object, k = 100)
@@ -51,3 +53,56 @@ T_cells <- SubsetData(object, ident.use = c("T cells")) %>%
 PrepareGSEA(T_cells, k = 100)
 ReportGSEA(file = "T_cells.Hallmark.NAM_versus_Control.Gsea.1555736788973",pos=F)
 ReportGSEA(file = "T_cells.GO.NAM_versus_Control.Gsea.1555737179894",pos=T)
+
+
+##################################
+# Generate figures from GSEA reports
+##################################
+
+cell_types <- c("ALL_cell","Macrophages","Monocytes","NK_cells","T_cells")
+# hallmark =======
+for(cell_type in cell_types){
+        subfoder = paste(path,"GSEA",cell_type,"Hallmark/",sep="/")
+        xls <- list.files(subfoder,pattern="gsea_report_for_.*xls")
+        xls_list <- lapply(paste0(subfoder,"/",xls),function(x) {
+                read_delim(x,"\t", escape_double = FALSE, trim_ws = TRUE)
+        })
+        df <- rbind.data.frame(xls_list[[1]],xls_list[[2]]) %>% 
+                as_tibble() %>%
+                arrange(desc(NES))
+        colnames(df)[1] = "pathway"
+        g <- ggplot(df, aes(reorder(pathway, NES), NES)) +
+                geom_col(aes(fill=`NOM p-val`<0.05)) +
+                coord_flip() +
+                labs(x="pathway", y="Normalized Enrichment Score",
+                     title=paste("Hallmark pathways NES in",cell_type,"in NAM conditions")) + 
+                theme_minimal()
+        jpeg(paste0(subfoder,"Hallmark_GSEA_",cell_type,".jpeg"), units="in", width=10, height=7,res=600)
+        print(g)
+        dev.off()
+}
+
+# GO =======
+pathways <- read_delim("doc/GO_pathway.txt","\t", escape_double = FALSE, 
+                       trim_ws = TRUE,col_names = F) %>% t %>% as.character()
+for(cell_type in cell_types){
+        subfoder = paste(path,"GSEA",cell_type,"GO/",sep="/")
+        xls <- list.files(subfoder,pattern="gsea_report_for_.*xls")
+        xls_list <- lapply(paste0(subfoder,"/",xls),function(x) {
+                read_delim(x,"\t", escape_double = FALSE, trim_ws = TRUE)
+        })
+        df <- rbind.data.frame(xls_list[[1]],xls_list[[2]]) %>% as.data.frame()
+        df <- df[(df[,1] %in% pathways),] %>% 
+                as_tibble() %>%
+                arrange(desc(NES))
+        colnames(df)[1] = "pathway"
+        g <- ggplot(df, aes(reorder(pathway, NES), NES)) +
+                geom_col(aes(fill=`NOM p-val`<0.05)) +
+                coord_flip() +
+                labs(x="pathway", y="Normalized Enrichment Score",
+                     title=paste("GO pathways NES in",cell_type,"in NAM conditions")) + 
+                theme_minimal()
+        jpeg(paste0(subfoder,"GO_GSEA_",cell_type,".jpeg"), units="in", width=10, height=7,res=600)
+        print(g)
+        dev.off()
+}

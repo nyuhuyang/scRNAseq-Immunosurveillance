@@ -3,8 +3,8 @@
 #  setup environment, install libraries if necessary, load libraries
 # 
 # ######################################################################
-invisible(sapply(c("Seurat","magrittr","SingleR","dplyr","reshape2",
-                   "kableExtra","pheatmap","tidyr"), function(x) {
+invisible(sapply(c("Seurat","magrittr","SingleR","dplyr","reshape2","ggpubr",
+                   "kableExtra","pheatmap","tidyr","readr"), function(x) {
                            suppressPackageStartupMessages(library(x,character.only = T))
                    }))
 source("../R/Seurat_functions.R")
@@ -157,3 +157,40 @@ df$p_val_adj = p.adjust(p = df$p_value, method = "bonferroni",
                         n = nrow(df))
 df %>% kable %>% kable_styling()
 write.csv(df,paste0(path,"cell_numbers.csv"))
+
+# ========= bar chart =============
+# load seurat
+(load(file="data/MouseTumor_2_20190417.Rda"))
+object %<>% SetAllIdent(id="manual")
+table(object@ident)
+# load gene list
+barchart_genes <- read_delim("doc/barchart_genes.txt","\t", escape_double = FALSE,
+                             trim_ws = TRUE) %>% nest(-cell_types)
+(cell_types <- barchart_genes$cell_types)
+barchart_path <- paste0(path,"barchart/")
+if(!dir.exists(barchart_path)) dir.create(barchart_path, recursive = T)
+
+for(i in 1:length(cell_types)){
+        print(cell_types[i])
+        sub_object <- SubsetData(object, ident.use = cell_types[i])
+        genes <- barchart_genes$data[[i]] %>% t %>% as.vector
+        genes <- FilterGenes(object, genes)
+        print(genes)
+        sub_object@meta.data[,genes] = t(sub_object@data[genes,])
+        sub_object_meta.data = sub_object@meta.data[,c("orig.ident",genes)]
+        colnames(sub_object_meta.data)[1] = "Conditions"
+        colnames(sub_object_meta.data) = gsub("-","",colnames(sub_object_meta.data))
+        genes1 = gsub("-","",genes)
+        for(k in 1:length(genes)){
+                jpeg(paste0(barchart_path,paste(cell_types[i],collapse = "_"),"_",genes[k],
+                            ".jpeg"), units="in", width=10, height=7,res=600)
+                p <- ggbarplot(sub_object_meta.data, x = "Conditions", y = genes1[k], 
+                               add = c("mean_se", "jitter"),ylab = paste(genes[k], "(UMI)"),
+                               color = "Conditions", palette = c("black", "red"))+
+                        stat_compare_means(label.x = 1.5, 
+                                           label.y = max(sub_object_meta.data[,genes1[k]])+0.25)
+                print(p)
+                dev.off()
+                print(paste0(k,":",length(genes)))
+        }
+}
