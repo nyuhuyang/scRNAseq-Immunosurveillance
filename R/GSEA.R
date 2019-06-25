@@ -12,12 +12,12 @@ library(magrittr)
 library(gplots)
 library(tidyverse)
 library(readr)
-source("../R/Seurat_functions.R")
+source("R/Seurat_functions.R")
 path <- paste0("./output/",gsub("-","",Sys.Date()),"/")
 if(!dir.exists(path)) dir.create(path, recursive = T)
 
 # 5.1 load data ==============
-(load(file = "./data/MouseTumor_2_20190417.Rda"))
+(load(file = "data/MouseTumor_2_20190417.Rda"))
 
 ##################################
 # Generate report from GSEA

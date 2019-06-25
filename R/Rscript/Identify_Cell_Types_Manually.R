@@ -6,15 +6,15 @@
 invisible(sapply(c("Seurat","tidyr","magrittr","dplyr","gplots"), function(x) {
         suppressPackageStartupMessages(library(x,character.only = T))
 }))
-source("../R/Seurat_functions.R")
-source("../R/SingleR_functions.R")
+source("R/Seurat_functions.R")
+source("R/SingleR_functions.R")
 path <- paste0("./output/",gsub("-","",Sys.Date()),"/")
 if(!dir.exists(path)) dir.create(path, recursive = T)
 #====== 2.1 identify phenotype for each cluster  ==========================================
 args <- commandArgs(trailingOnly = TRUE)
 args[1] = as.character(args[1])
 (load(file = args[1]))
-df_markers <- readxl::read_excel("../seurat_resources/bio-rad-markers.xlsx")
+df_markers <- readxl::read_excel("doc/bio-rad-markers.xlsx")
 #df_markers <- readxl::read_excel("../seurat_resources/bio-rad-markers.xlsx",sheet = "Human.sub")
 colnames(df_markers) = gsub(" ","_",colnames(df_markers))
 colnames(df_markers) = gsub(":|\\/","_",colnames(df_markers))

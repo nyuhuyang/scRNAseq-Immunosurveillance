@@ -6,8 +6,8 @@
 invisible(sapply(c("Seurat","magrittr","SingleR","dplyr"), function(x) {
         suppressPackageStartupMessages(library(x,character.only = T))
 }))
-source("../R/Seurat_functions.R")
-source("../R/SingleR_functions.R")
+source("R/Seurat_functions.R")
+source("R/SingleR_functions.R")
 path <- paste0("./output/",gsub("-","",Sys.Date()),"/")
 if(!dir.exists(path)) dir.create(path, recursive = T)
 #====== 3.1 Create Singler Object  ==========================================

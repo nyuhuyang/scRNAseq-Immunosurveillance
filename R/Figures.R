@@ -7,8 +7,8 @@ invisible(sapply(c("Seurat","magrittr","SingleR","dplyr","reshape2","ggpubr",
                    "kableExtra","pheatmap","tidyr","readr"), function(x) {
                            suppressPackageStartupMessages(library(x,character.only = T))
                    }))
-source("../R/Seurat_functions.R")
-source("../R/SingleR_functions.R")
+source("R/Seurat_functions.R")
+source("R/SingleR_functions.R")
 path <- paste0("output/",gsub("-","",Sys.Date()),"/")
 if(!dir.exists(path)) dir.create(path, recursive = T)
 #====== load data ==========================================
@@ -76,7 +76,7 @@ dev.off()
 ##############################
 # Adjust cell label, keep T/NK, macrophages and monocytes only
 ##############################
-TSNEPlot.1(object, do.label = T,colors.use = ExtractMetaColor(object))
+TSNEPlot.1(object, do.label = T,colors.use = ExtractMetaColor(object), do.print = T)
 object %<>% SetAllIdent(id = "singler2sub")
 object %<>% SubsetData(ident.remove = c("Granulocytes","B cells"))
 object %<>% SetAllIdent("res.0.6")

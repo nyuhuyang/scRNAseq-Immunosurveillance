@@ -1,0 +1,62 @@
+genes	cell_types
+Arg1	Macrophages
+H2-DMb1	Macrophages
+H2-D1	Macrophages
+Cd14	Macrophages
+H2-Ab1	Macrophages
+H2-Eb1	Macrophages
+Cxcl9	Macrophages
+H2-DMb2	Macrophages
+H2-Aa	Macrophages
+Tnfrsf9	Macrophages
+Irf1	Macrophages
+Cxcl10	Macrophages
+Nfkb1	Macrophages
+Il10	Macrophages
+Ifitm1	Monocytes
+H2-DMb1	Monocytes
+Irf1	Monocytes
+H2-D1	Monocytes
+H2-DMb2	Monocytes
+Cxcl9	Monocytes
+H2-DMa	Monocytes
+H2-Eb1	Monocytes
+Il1rn	Monocytes
+Il10	Monocytes
+Nfkb1	Monocytes
+Cd3g	NK cells
+Cd3e	NK cells
+Cd8a	NK cells
+Cd8b1	NK cells
+Cd3d	NK cells
+Pdcd1	NK cells
+Lag3	NK cells
+Gzmb	NK cells
+Rela	NK cells
+Ddit3	NK cells
+Klrc1	T cells
+Gzmb	T cells
+Fasl	T cells
+Cd8a	T cells
+Trp53	T cells
+Cd3e	T cells
+Tnfsf8	T cells
+Cdkn1b	T cells
+Cd3g	T cells
+Cd3e	T cells
+Cd8a	T cells
+Cd8b1	T cells
+Cd3d	T cells
+Pdcd1	T cells
+Lag3	T cells
+Gzmb	T cells
+Rela	T cells
+Ddit3	T cells
+Klrc1	NK cells
+Gzmb	NK cells
+Fasl	NK cells
+Cd8a	NK cells
+Trp53	NK cells
+Cd3e	NK cells
+Tnfsf8	NK cells
+Cdkn1b	NK cells

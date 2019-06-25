@@ -6,8 +6,8 @@
 invisible(lapply(c("DropletUtils","dplyr","scater","kableExtra","Matrix"), function(x) {
         suppressPackageStartupMessages(library(x,character.only = T))
 }))
-source("../R/Seurat_functions.R")
-source("../R/scatter_utils.R")
+source("R/Seurat_functions.R")
+source("R/scatter_utils.R")
 path <- paste0("./output/",gsub("-","",Sys.Date()),"/")
 if(!dir.exists(path)) dir.create(path, recursive = T)
 ########################################################################
