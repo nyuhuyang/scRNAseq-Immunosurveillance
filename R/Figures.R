@@ -84,9 +84,12 @@ TSNEPlot(object, do.label = T)
 object %<>% SubsetData(ident.remove = c(10,14))
 
 T_cells <- SubsetData(object, ident.use = c(8,9,12))
-T_cells_id_copy <- FeaturePlot(object, features.plot = "Cd3g", do.identify = T)
-T_cells_id = unique(c(T_cells_id,T_cells_id_copy))
+T_cells_id <- FeaturePlot(object, features.plot = "Cd3g", do.identify = T)
 length(T_cells_id)
+write.csv(T_cells_id,"doc/T_cells_id.csv"))
+# read
+T_cells_id = read.csv("doc/T_cells_id.csv",row.names = 1, stringsAsFactors = F)
+T_cells_id = T_cells_id$x
 remove(T_cells);GC()
 
 object@meta.data$manual <- object@meta.data$singler2sub

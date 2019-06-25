@@ -20,7 +20,7 @@ if(!dir.exists("./data/")) dir.create("data")
 
 # 3.1.1 load data
 # Rename ident
-args <- commandArgs(trailingOnly = TRUE)
+#args <- commandArgs(trailingOnly = TRUE)
 (load(file = "./data/MouseTumor_2_20190417.Rda"))
 #args[1] = as.character(args[1])
 #(load(file = args[1]))
