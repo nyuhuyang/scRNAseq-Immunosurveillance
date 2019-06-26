@@ -4,8 +4,8 @@ This project provides the code developed in the study of Aitziber Buqué _et al.
 
 ## **Requirements**
 
-* R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
-* R librarys: DropletUtils_1.2.2, IRanges_2.16.0, R.methodsS3_1.7.1, Biobase_2.42.0, BiocGenerics_0.28.0, BiocParallel_1.16.6, cowplot_0.9.4, DelayedArray_0.8.0, dplyr_0.8.1, fgsea_1.8.0, GenomeInfoDb_1.18.2, GenomicRanges_1.34.0, ggplot2_3.1.1, ggpubr_0.2, gplots_3.0.1.1, harmony_0.1.0, kableExtra_1.1.0, magrittr_1.5, Matrix_1.2-15, matrixStats_0.54.0, pheatmap_1.0.12, R.oo_1.22.0, R.utils_2.8.0, Rcpp_1.0.1, readr_1.3.1, reshape2_1.4.3, S4Vectors_0.20.1, scater_1.10.1, Seurat_2.3.4, SingleCellExperiment_1.4.1, SingleR_0.2.2, SummarizedExperiment_1.12.0, tidyr_0.8.3
+* R (tested in R version 3.5.2 (2018-12-20) -- "Eggshell Igloo")
+* R librarys: DropletUtils, IRanges, R.methodsS3, Biobase, BiocGenerics, BiocParallel, cowplot, DelayedArray, dplyr, fgsea, GenomeInfoDb, GenomicRanges, ggplot2, ggpubr, gplots, harmony, kableExtra, magrittr, Matrix, matrixStats, pheatmap, R.oo, R.utils, Rcpp, readr, reshape2, S4Vectors, scater, Seurat, SingleCellExperiment, SingleR, SummarizedExperiment, tidyr
 
 ## **Data**
 
