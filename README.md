@@ -34,10 +34,10 @@ Above three scripts assume they are run on the same date. Otherwise the `{date}`
 
 [4 Identify_Cell_Types_Manually.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Rscript/Identify_Cell_Types_Manually.R)
 
-An R shiny app is built to identify cell types. [scRNAseq-Immunosurveillance](https://weillcornellmed.shinyapps.io/scRNAseq-Immunosurveillance/)
-
-
 Run `Rscript R/Rscript/Identify_Cell_Types_Manually.R "data/MouseTumor_2_{date}.Rda"`. This script use predefinde cell type markers to manually identify cell types.
+
+In addition, an R shiny app is built to identify cell types. [scRNAseq-Immunosurveillance](https://weillcornellmed.shinyapps.io/scRNAseq-Immunosurveillance/)
+
 
 [5 SingleR.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Rscript/SingleR.R)
 
@@ -48,10 +48,10 @@ Run `Rscript R/Rscript/SingleR.R "data/MouseTumor_2_{date}.Rda"`. This script us
 [6 Figures.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Figures.R), removing unwanted cells, relabel the clustering, generate tsne plot and bar plots. 
 
 For more information see
-[_Generate TSNE plots and compare gene expression in individual cell types (figure 8a-b)_](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/wiki/1.-Generate-TSNE-plots-and-compare-gene-expression-in-individual-cell-types-(figure-8a,-b))
+[_Generate TSNE plots and compare gene expression in individual cell types (figure 8a-b)_](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/wiki/1.-Generate-TSNE-plots-and-compare-gene-expression-in-individual-cell-types)
 
 [7 Differential_analysis.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Differential_analysis.R), conducting differential analysis between control and NAM treated tumor sample, and generate heatmaps.
 
 [8 FGESA.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/FGESA.R), performing gene set enrichment analysis based on the results from previous step 7. 
 
-For more information, see [_2. Differential analysis and gene set enrichment analysis (figure S7, S8)_](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/wiki/2.-Differential-analysis-and-gene-set-enrichment-analysis-(figure-S7, S8))
+For more information, see [_Differential analysis and gene set enrichment analysis (figure S7, S8)_](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/wiki/2.-Differential-analysis-and-gene-set-enrichment-analysis)
