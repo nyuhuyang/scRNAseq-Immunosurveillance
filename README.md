@@ -51,8 +51,6 @@ Run `Rscript R/Rscript/SingleR.R "data/MouseTumor_2_{date}.Rda"`. This script us
 
 After completing step 4,5 and identified all cell types, here we will compare specific gene expression in different cell types.
 
-See detail script here: [6 Figures.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Figures.R)
-
 Use the results from step 4 and 5. Below figure shows all cell types identified.
 ![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/T%20cells_Monocytes.jpeg)
 
@@ -68,8 +66,6 @@ Use the scripts in bar chart section and generate multiple figures representing 
 2. Differential analysis and gene set enrichment analysis (figure S7, S8)
 
 After removing all other unwanted cell types from step 6, we will analyze the gene signature of each cell type and performing GSEA.
-
-[8 FGESA.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/FGESA.R)
 
 conducting differential analysis between control and NAM treated tumor sample, and generate heatmaps like below:
 ![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/Monocytes_NAM%20vs.Monocytes_Control.jpeg)
