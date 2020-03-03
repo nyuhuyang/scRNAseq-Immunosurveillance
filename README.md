@@ -47,11 +47,32 @@ Run `Rscript R/Rscript/SingleR.R "data/MouseTumor_2_{date}.Rda"`. This script us
 
 [6 Figures.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Figures.R), removing unwanted cells, relabel the clustering, generate tsne plot and bar plots. 
 
-For more information see
-[_Generate TSNE plots and compare gene expression in individual cell types (figure 8a-b)_](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/wiki/1.-Generate-TSNE-plots-and-compare-gene-expression-in-individual-cell-types)
+6.1. Generate TSNE plots and compare gene expression in individual cell types (figure 8a, b)
+
+After completing step 4,5 and identified all cell types, here we will compare specific gene expression in different cell types.
+
+See detail script here: [6 Figures.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Figures.R)
+
+Use the results from step 4 and 5. Below figure shows all cell types identified.
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/T%20cells_Monocytes.jpeg)
+
+Keep Macrophages, Monocytes, T, NK cells and remove all other cell types.
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/T%20cells_NK%20cells.jpeg)
+
+Use the scripts in bar chart section and generate multiple figures representing gene expression in each individual cell type, like below
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/Macrophages_H2-D1.jpeg)
 
 [7 Differential_analysis.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Differential_analysis.R), conducting differential analysis between control and NAM treated tumor sample, and generate heatmaps.
 
 [8 FGESA.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/FGESA.R), performing gene set enrichment analysis based on the results from previous step 7. 
+2. Differential analysis and gene set enrichment analysis (figure S7, S8)
 
-For more information, see [_Differential analysis and gene set enrichment analysis (figure S7, S8)_](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/wiki/2.-Differential-analysis-and-gene-set-enrichment-analysis)
+After removing all other unwanted cell types from step 6, we will analyze the gene signature of each cell type and performing GSEA.
+
+[8 FGESA.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/FGESA.R)
+
+conducting differential analysis between control and NAM treated tumor sample, and generate heatmaps like below:
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/Monocytes_NAM%20vs.Monocytes_Control.jpeg)
+
+Performing gene set enrichment analysis based on the results from previous step 7.
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/Hallmark_GSEA_Macrophages.jpeg)
