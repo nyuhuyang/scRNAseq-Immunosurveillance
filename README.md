@@ -1,6 +1,6 @@
 # **Study CD45+ tumor infiltrate of mouse tumors with single-cell RNA-seq**
 
-This project provides the code developed in the study of Aitziber Buqué _et al._ **_"Immunosurveillance of HR+ 1 breast cancer - Prophylactic and therapeutic effects of nicotinamide"_**. It focuses on comparing control vs. nicotinamide (NAM) treated CD45+ tumor infiltrate of mouse tumors with single-cell RNA-seq.
+The scripts developed for the single-cell RNA-seq study in Aitziber Buqué _et al._ **_"Immunosurveillance of HR+ 1 breast cancer - Prophylactic and therapeutic effects of nicotinamide"_**. It focuses on comparing control vs. nicotinamide (NAM) treated CD45+ tumor infiltrate of mouse tumors with single-cell RNA-seq.
 
 ## **Requirements**
 
