@@ -12,8 +12,9 @@ library(magrittr)
 library(gplots)
 library(tidyverse)
 library(readr)
+library(openxlsx)
 source("R/Seurat_functions.R")
-path <- paste0("./output/",gsub("-","",Sys.Date()),"/")
+path <- "output/20190422/"
 if(!dir.exists(path)) dir.create(path, recursive = T)
 
 # 5.1 load data ==============
@@ -58,10 +59,11 @@ ReportGSEA(file = "T_cells.GO.NAM_versus_Control.Gsea.1555737179894",pos=T)
 ##################################
 # Generate figures from GSEA reports
 ##################################
-
+data = list()
 cell_types <- c("ALL_cell","Macrophages","Monocytes","NK_cells","T_cells")
 # hallmark =======
-for(cell_type in cell_types){
+for(i in seq_along(cell_types)){
+        cell_type = cell_types[i]
         subfoder = paste(path,"GSEA",cell_type,"Hallmark/",sep="/")
         xls <- list.files(subfoder,pattern="gsea_report_for_.*xls")
         xls_list <- lapply(paste0(subfoder,"/",xls),function(x) {
@@ -80,12 +82,14 @@ for(cell_type in cell_types){
         jpeg(paste0(subfoder,"Hallmark_GSEA_",cell_type,".jpeg"), units="in", width=10, height=7,res=600)
         print(g)
         dev.off()
+        df$X12 = NULL
+        data[[i]] = df
 }
-
 # GO =======
 pathways <- read_delim("doc/GO_pathway.txt","\t", escape_double = FALSE, 
                        trim_ws = TRUE,col_names = F) %>% t %>% as.character()
-for(cell_type in cell_types){
+for(i in seq_along(cell_types)){
+        cell_type = cell_types[i]
         subfoder = paste(path,"GSEA",cell_type,"GO/",sep="/")
         xls <- list.files(subfoder,pattern="gsea_report_for_.*xls")
         xls_list <- lapply(paste0(subfoder,"/",xls),function(x) {
@@ -105,4 +109,10 @@ for(cell_type in cell_types){
         jpeg(paste0(subfoder,"GO_GSEA_",cell_type,".jpeg"), units="in", width=10, height=7,res=600)
         print(g)
         dev.off()
+        df$X12 = NULL
+        data[[i+5]] = df
 }
+names(data) = paste0(rep(cell_types,time = 2),rep(c("_hallmark","_GO"),each = 5))
+data = data[]
+write.xlsx(data, file = paste0(path,"GSEA_results.xlsx"),
+           colNames = TRUE, borders = "surrounding",colWidths = c(NA, "auto", "auto"))

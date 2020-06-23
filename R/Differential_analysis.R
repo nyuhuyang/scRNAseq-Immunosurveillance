@@ -1,6 +1,6 @@
 ########################################################################
 #
-#  0 setup environment, install libraries if nLynchessary, load libraries
+#  0 setup environment, install libraries load libraries
 # 
 # ######################################################################
 
@@ -21,7 +21,7 @@ if(!dir.exists("./data/")) dir.create("data")
 # 3.1.1 load data
 # Rename ident
 #args <- commandArgs(trailingOnly = TRUE)
-(load(file = "./data/MouseTumor_2_20190417.Rda"))
+(load(file = "data/MouseTumor_2_20190417.Rda"))
 #args[1] = as.character(args[1])
 #(load(file = args[1]))
 
@@ -68,7 +68,8 @@ for(id in ident){
 object %<>% SetAllIdent(id = "manual")
 table(object@ident)
 Top_n =50
-if(!dir.exists(paste0(subfolder,"heatmap2/"))) dir.create(paste0(subfolder,"heatmap2/"), recursive = T)
+subfolder = paste0("output/20190423/","NAM_vs_Control/")
+if(!dir.exists(subfolder)) dir.create(subfolder, recursive = T)
 for(id in ident){
         id.pair <- read.csv(paste0(subfolder,id,"_NAM vs.",id,"_Control.csv"), header = 1, row.names = 1)
         object_subset <- SubsetData(object,ident.use = id)
@@ -76,7 +77,9 @@ for(id in ident){
         colnames(id.pair)[8] = "cluster"
         top <-  id.pair %>%  group_by(cluster) %>% top_n(Top_n, avg_logFC)
         bottom <-  id.pair %>% group_by(cluster) %>% top_n(Top_n, -avg_logFC)
-        all <- c(as.character(top$gene), as.character(bottom$gene))
+        all <- rbind(top, bottom)
+        write.csv(all, file = paste0("output/20190423/",id,".csv"))
+        all <- (as.character(top$gene), as.character(bottom$gene))
         y = object_subset@scale.data[unique(all),]
         hc <- hclust(as.dist(1-cor(as.matrix(y), method="spearman")), method="complete")
         cc = gsub("_.*","",hc$labels)
