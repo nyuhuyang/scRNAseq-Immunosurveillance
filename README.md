@@ -1,11 +1,11 @@
 # **Study CD45+ tumor infiltrate of mouse tumors with single-cell RNA-seq**
 
-This project provides the code developed in the study of Aitziber Buqué _et al._ **_"Immunosurveillance of HR+ 1 breast cancer - Prophylactic and therapeutic effects of nicotinamide"_**. It focuses on comparing control vs. nicotinamide (NAM) treated CD45+ tumor infiltrate of mouse tumors with single-cell RNA-seq.
+The scripts developed for the single-cell RNA-seq study in Aitziber Buqué _et al._ **_"Immunosurveillance of HR+ 1 breast cancer - Prophylactic and therapeutic effects of nicotinamide"_**. It focuses on comparing control vs. nicotinamide (NAM) treated CD45+ tumor infiltrate of mouse tumors with single-cell RNA-seq.
 
 ## **Requirements**
 
-* R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
-* R librarys: DropletUtils_1.2.2, IRanges_2.16.0, R.methodsS3_1.7.1, Biobase_2.42.0, BiocGenerics_0.28.0, BiocParallel_1.16.6, cowplot_0.9.4, DelayedArray_0.8.0, dplyr_0.8.1, fgsea_1.8.0, GenomeInfoDb_1.18.2, GenomicRanges_1.34.0, ggplot2_3.1.1, ggpubr_0.2, gplots_3.0.1.1, harmony_0.1.0, kableExtra_1.1.0, magrittr_1.5, Matrix_1.2-15, matrixStats_0.54.0, pheatmap_1.0.12, R.oo_1.22.0, R.utils_2.8.0, Rcpp_1.0.1, readr_1.3.1, reshape2_1.4.3, S4Vectors_0.20.1, scater_1.10.1, Seurat_2.3.4, SingleCellExperiment_1.4.1, SingleR_0.2.2, SummarizedExperiment_1.12.0, tidyr_0.8.3
+* R (tested in R version 3.5.2 (2018-12-20) -- "Eggshell Igloo")
+* R librarys: DropletUtils, IRanges, R.methodsS3, Biobase, BiocGenerics, BiocParallel, cowplot, DelayedArray, dplyr, fgsea, GenomeInfoDb, GenomicRanges, ggplot2, ggpubr, gplots, harmony, kableExtra, magrittr, Matrix, matrixStats, pheatmap, R.oo, R.utils, Rcpp, readr, reshape2, S4Vectors, scater, Seurat, SingleCellExperiment, SingleR, SummarizedExperiment, tidyr
 
 ## **Data**
 
@@ -47,11 +47,28 @@ Run `Rscript R/Rscript/SingleR.R "data/MouseTumor_2_{date}.Rda"`. This script us
 
 [6 Figures.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Figures.R), removing unwanted cells, relabel the clustering, generate tsne plot and bar plots. 
 
-For more information see
-[_Generate TSNE plots and compare gene expression in individual cell types (figure 8a-b)_](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/wiki/1.-Generate-TSNE-plots-and-compare-gene-expression-in-individual-cell-types)
+6.1. Generate TSNE plots and compare gene expression in individual cell types (figure 8a, b)
+
+After completing step 4,5 and identified all cell types, here we will compare specific gene expression in different cell types.
+
+Use the results from step 4 and 5. Below figure shows all cell types identified.
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/T%20cells_Monocytes.jpeg)
+
+Keep Macrophages, Monocytes, T, NK cells and remove all other cell types.
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/T%20cells_NK%20cells.jpeg)
+
+Use the scripts in bar chart section and generate multiple figures representing gene expression in each individual cell type, like below
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/Macrophages_H2-D1.jpeg)
 
 [7 Differential_analysis.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/Differential_analysis.R), conducting differential analysis between control and NAM treated tumor sample, and generate heatmaps.
 
 [8 FGESA.R](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/R/FGESA.R), performing gene set enrichment analysis based on the results from previous step 7. 
+2. Differential analysis and gene set enrichment analysis (figure S7, S8)
 
-For more information, see [_Differential analysis and gene set enrichment analysis (figure S7, S8)_](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/wiki/2.-Differential-analysis-and-gene-set-enrichment-analysis)
+After removing all other unwanted cell types from step 6, we will analyze the gene signature of each cell type and performing GSEA.
+
+conducting differential analysis between control and NAM treated tumor sample, and generate heatmaps like below:
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/Monocytes_NAM%20vs.Monocytes_Control.jpeg)
+
+Performing gene set enrichment analysis based on the results from previous step 7.
+![](https://github.com/nyuhuyang/scRNAseq-Immunosurveillance/blob/master/Figs/Hallmark_GSEA_Macrophages.jpeg)
